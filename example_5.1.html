@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+<script src="jquery-1.7.2.min.js"></script>
+<script src="knockout-2.1.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+var Person = function(data) {
+    this.name = ko.observable(data.name);
+    this.age = ko.observable(data.age);
+    
+    this.formatted = ko.computed(function() {
+    	return this.name() + '(' + this.age() + ')';
+    }, this);
+}
+</script>
+</head>
+<body>
+<div id="html">
+<h4>People</h4>
+<ul data-bind="foreach: people">
+    <li>
+    	Name at position <span data-bind="text: $index"> </span>:
+        <span data-bind="text: name"> </span>
+        <a href="#" data-bind="click: $parent.removePerson">Remove</a>
+    </li>
+</ul>
+<button data-bind="click: addPerson">Add</button>
+</div>
+<div id="js_code" style="display:none;">
+function ViewModel() {
+    var self = this;
+ 
+    self.people = ko.observableArray([
+        new Person({ name: 'Ola Nordmann', age: 34}),
+        new Person({ name: 'Kari Nordmann', age: 38}),
+        new Person({ name: 'Emma Olsen',  age: 20})
+    ]);
+    
+    self.addPerson = function() {
+        self.people.push(new Person({ name: 'Arild Nilesn', age: 25 }));
+    };
+    
+    self.removePerson = function() {
+        self.people.remove(this);
+    }
+}
+ 
+ko.applyBindings(new ViewModel());
+</div>
+</body>
+</html>
